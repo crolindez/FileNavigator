@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+	<EditTextPreference
+		android:key="ip_address"
+		android:title="IP Address"
+		android:summary="Shared folder IP address"
+		android:dialogTitle="IP Address"
+		android:dialogMessage="Provide IP address of shared folder"   
+		android:defaultValue="192.0.0.102" 
+	/>
+
+
+	<EditTextPreference
+		android:key="domain_name"
+		android:title="Domain Name"
+		android:summary="Domain where the folder is shared"
+		android:dialogTitle="Domain Name"
+		android:dialogMessage="Provide domain name"   
+		android:defaultValue="Eissa" 
+	/>
+
+	<EditTextPreference
+		android:key="user_name"
+		android:title="User Name"
+		android:summary="Your user name"
+		android:dialogTitle="User Name"
+		android:dialogMessage="Provide user name"   
+		android:defaultValue="" 
+	/>
+
+	<EditTextPreference
+		android:key="password"
+		android:title="Password"
+		android:summary="Your password to access the shared folder"
+		android:dialogTitle="Password"
+		android:dialogMessage="Type your password"   
+		android:defaultValue="" 
+		android:inputType="textPassword" 
+	/>
+
+</PreferenceScreen>
+
