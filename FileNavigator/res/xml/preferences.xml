@@ -2,12 +2,12 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
 	<EditTextPreference
-		android:key="ip_address"
-		android:title="IP Address"
-		android:summary="Shared folder IP address"
-		android:dialogTitle="IP Address"
-		android:dialogMessage="Provide IP address of shared folder"   
-		android:defaultValue="192.0.0.102" 
+		android:key="shared_resource_address"
+		android:title="Shared resource Address"
+		android:summary="Shared resource address"
+		android:dialogTitle="Shared Folder Address"
+		android:dialogMessage="address of shared folder"   
+		android:defaultValue="192.168.1.4/Users" 
 	/>
 
 
@@ -17,7 +17,7 @@
 		android:summary="Domain where the folder is shared"
 		android:dialogTitle="Domain Name"
 		android:dialogMessage="Provide domain name"   
-		android:defaultValue="Eissa" 
+		android:defaultValue="" 
 	/>
 
 	<EditTextPreference

@@ -65,9 +65,16 @@ public class FileListAdapter extends BaseAdapter {
 		}
 		
 		TextView filename = (TextView)localView.findViewById(R.id.filename_list);	
+		TextView size = (TextView)localView.findViewById(R.id.size_list);	
+		
 		file = mFileList.get(position);		
+		
 		filename.setText(file.fileName);
-	
+		if (!(file.isFolder))
+			size.setText(Long.toString(file.size/1024)+" KB");
+		else
+			size.setText("");
+		
 		return localView;
 	}
 	

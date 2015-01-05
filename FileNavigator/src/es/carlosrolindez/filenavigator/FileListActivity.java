@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.app.LoaderManager;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Menu;
@@ -22,25 +23,29 @@ public class FileListActivity extends Activity implements LoaderManager.LoaderCa
 	private FileListAdapter listAdapter;
 	private ArrayList<FileDescription> fileList;
 	private LoaderManager lm;
+	private String path;
+	private FileListActivity fileListActivity;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		fileListActivity = this;
     	loadPreferences();
     	setContentView(R.layout.activity_main);
-    	
-
-    	
+    	    	
       	if (savedInstanceState != null) 
       	{
       		fileList = savedInstanceState.getParcelableArrayList(FileTool.FILE_LIST_KEY);
+      		path = savedInstanceState.getString(FileTool.PATH_KEY,"");
       	}
       	else
-      	{
+      	{	
+      		path = "";
         	lm = getLoaderManager(); 
 		    Bundle pathString = new Bundle();
-		    pathString.putString(FileTool.PATH, "");  	
-		    lm.restartLoader(FileTool.LOADER_BROWSE, pathString, this);	
+		    pathString.putString(FileTool.PATH_KEY, path);  	
+		    lm.restartLoader(FileTool.LOADER_BROWSE, pathString, fileListActivity);	
 
       	}
 		
@@ -51,13 +56,23 @@ public class FileListActivity extends Activity implements LoaderManager.LoaderCa
     		@Override
         	public void onItemClick(AdapterView<?> parent, View view, int position, long id) 
         	{ 			
+    			FileDescription fileDescription = (FileDescription) parent.getItemAtPosition(position);
+    			if (fileDescription.isFolder)
+    			{
+    				path = path + fileDescription.fileName;
+    		      	lm = getLoaderManager(); 
+    			    Bundle pathString = new Bundle();
+    			    pathString.putString(FileTool.PATH_KEY, path);  	
+    			    lm.restartLoader(FileTool.LOADER_BROWSE, pathString, fileListActivity);	
+
+    				
+    			}
 //    	    	Intent intent = new Intent (view.getContext(), FileListActivity.class);
 //    	        Product product = (Product)parent.getItemAtPosition(position);    	
 //            	intent.putExtra(NavisionTool.LAUNCH_DESCRIPTION, product.description);  
 //            	intent.putExtra(NavisionTool.LAUNCH_INFO_MODE, NavisionTool.INFO_MODE_SUMMARY);
 //            	startActivity(intent);
-            	
-            	Toast.makeText(view.getContext(), "List Item", Toast.LENGTH_SHORT).show();
+
         	}
     	});  
 
@@ -72,6 +87,11 @@ public class FileListActivity extends Activity implements LoaderManager.LoaderCa
 	private void loadPreferences()
 	{
 	    PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+	   	SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+		FileTool.setServerConnection( sharedPref.getString("shared_resource_address", ""),
+    			sharedPref.getString("domain_name", ""), 
+    			sharedPref.getString("user_name", ""), 
+    			sharedPref.getString("password", ""));
 	}
 
 	@Override
@@ -100,6 +120,7 @@ public class FileListActivity extends Activity implements LoaderManager.LoaderCa
     {
 	   	super.onSaveInstanceState(savedState);
         savedState.putParcelableArrayList(FileTool.FILE_LIST_KEY, fileList);
+        savedState.putString(FileTool.PATH_KEY, path);
 	}   
     
 	void showResultSet(ArrayList<FileDescription> fileListLoaded)

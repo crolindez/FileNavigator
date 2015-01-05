@@ -3,6 +3,9 @@ package es.carlosrolindez.filenavigator;
 import java.util.ArrayList;
 import java.util.Locale;
 
+import jcifs.smb.NtlmPasswordAuthentication;
+import jcifs.smb.SmbFile;
+import jcifs.smb.SmbFileOutputStream;
 import android.content.AsyncTaskLoader;
 import android.content.Context;
 import android.os.Bundle;
@@ -18,31 +21,18 @@ public class FileListLoader extends AsyncTaskLoader<ArrayList<FileDescription>> 
 	public FileListLoader(Context ctx,int id, Bundle filter)
 	{
 		super(ctx);
-		path = filter.getString(FileTool.PATH,"").toUpperCase(Locale.US);	
+		path = filter.getString(FileTool.PATH_KEY,"").toUpperCase(Locale.US);	
 		loaderMode = id;
 	
 	}
 	
 	@Override
 	public ArrayList<FileDescription> loadInBackground()
-	{
-		FileDescription file; 	
-		fileList = new ArrayList<FileDescription>();
+	{	
+		fileList = FileTool.readFolder(path);
+		return fileList;
 
-		{
-			file = new FileDescription(); 	
-			file.fileName = "prueba1";
-			fileList.add(file);	 
-				
-			file = new FileDescription(); 	
-			file.fileName = "prueba2";
-			fileList.add(file);	 
-	
-	    	return fileList;
-			
-		}
-
-	}
+ 	}
 	
 	
 	@Override

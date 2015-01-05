@@ -42,7 +42,7 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
     {
         EditTextPreference preference; 
         
-        preference = (EditTextPreference) getPreferenceScreen().findPreference("ip_address");
+        preference = (EditTextPreference) getPreferenceScreen().findPreference("shared_resource_address");
         preference.setSummary(preference.getText());
         
         
