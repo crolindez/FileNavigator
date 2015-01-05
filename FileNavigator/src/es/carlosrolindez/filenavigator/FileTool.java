@@ -48,7 +48,7 @@ public class FileTool
 //	      	String sSambaFolder =  "192.168.1.4/Users";
 			String url = "smb://" + address + '/' + path;
 			
-			NtlmPasswordAuthentication auth = new NtlmPasswordAuthentication("", username, password);
+			NtlmPasswordAuthentication auth = new NtlmPasswordAuthentication(domain, username, password);
 			
 			SmbFile file = new SmbFile(url, auth);		
 			SmbFile[] fileArray = file.listFiles();
