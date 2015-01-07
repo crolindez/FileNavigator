@@ -1,9 +1,14 @@
 package es.carlosrolindez.filenavigator;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 
 import jcifs.smb.NtlmPasswordAuthentication;
 import jcifs.smb.SmbFile;
+import android.os.Environment;
 
 
 public class FileTool 
@@ -69,9 +74,60 @@ public class FileTool
         
 	    } catch (Exception e) {
 	        e.printStackTrace();
-	        android.util.Log.e("loadInBackground",e.getMessage());
 	        return null;
 	    }
+	}
+	
+	
+	static public File copyToPhone(String strPCPath)
+	{
+	    SmbFile smbFileToDownload = null;      
+	    
+	    try 
+	    {
+	        File localFilePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS+"/Temporalfolder");
+
+	        // create sdcard path if not exist.
+	        if (!localFilePath.isDirectory()) 
+	        {
+	            localFilePath.mkdir();
+	        }
+	        try 
+	        {         
+
+				String url = "smb://" + address + '/' + strPCPath;				
+				NtlmPasswordAuthentication auth = new NtlmPasswordAuthentication(domain, username, password);
+	            smbFileToDownload = new SmbFile(url , auth);
+	            String smbFileName = smbFileToDownload.getName();
+                InputStream inputStream = smbFileToDownload.getInputStream();
+
+                File localFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),"/Temporalfolder/"+smbFileName);
+                
+                OutputStream out = new FileOutputStream(localFile);
+                
+                byte buf[] = new byte[16 * 1024 * 1024];
+                int len;
+                while ((len = inputStream.read(buf)) > 0) 
+                {
+                    out.write(buf, 0, len);
+                }
+                out.flush();
+                out.close();
+                inputStream.close();
+                return localFile;
+	        }
+	        catch (Exception e) 
+	        {
+	            e.printStackTrace();
+		        return null;
+	        }
+	    } 
+	    catch (Exception e) 
+	    {
+	        e.printStackTrace();
+	        return null;
+	    }   
+
 	}
 
 }

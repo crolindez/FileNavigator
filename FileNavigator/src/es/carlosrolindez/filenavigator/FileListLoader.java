@@ -3,9 +3,6 @@ package es.carlosrolindez.filenavigator;
 import java.util.ArrayList;
 import java.util.Locale;
 
-import jcifs.smb.NtlmPasswordAuthentication;
-import jcifs.smb.SmbFile;
-import jcifs.smb.SmbFileOutputStream;
 import android.content.AsyncTaskLoader;
 import android.content.Context;
 import android.os.Bundle;

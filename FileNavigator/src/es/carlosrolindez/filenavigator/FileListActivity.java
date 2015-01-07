@@ -1,5 +1,6 @@
 package es.carlosrolindez.filenavigator;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import android.app.Activity;
@@ -7,6 +8,7 @@ import android.app.LoaderManager;
 import android.content.Intent;
 import android.content.Loader;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Menu;
@@ -57,9 +59,10 @@ public class FileListActivity extends Activity implements LoaderManager.LoaderCa
         	public void onItemClick(AdapterView<?> parent, View view, int position, long id) 
         	{ 			
     			FileDescription fileDescription = (FileDescription) parent.getItemAtPosition(position);
+
     			if (fileDescription.isFolder)
     			{
-    				path = path + fileDescription.fileName;
+      				path = path + fileDescription.fileName;
     		      	lm = getLoaderManager(); 
     			    Bundle pathString = new Bundle();
     			    pathString.putString(FileTool.PATH_KEY, path);  	
@@ -67,11 +70,59 @@ public class FileListActivity extends Activity implements LoaderManager.LoaderCa
 
     				
     			}
+    			else
+    			{   				
+    				File file=FileTool.copyToPhone(path + fileDescription.fileName);
+	    	        Uri uri = Uri.fromFile(file);
+	    	        
+	    	        Intent intent = new Intent(Intent.ACTION_VIEW);
+	    	        // Check what kind of file you are trying to open, by comparing the url with extensions.
+	    	        // When the if condition is matched, plugin sets the correct intent (mime) type, 
+	    	        // so Android knew what application to use to open the file
+	    	        if (file.toString().contains(".doc") || file.toString().contains(".docx")) {
+	    	            // Word document
+	    	            intent.setDataAndType(uri, "application/msword");
+	    	        } else if(file.toString().toLowerCase().contains(".pdf")) {
+	    	            // PDF file
+	    	            intent.setDataAndType(uri, "application/pdf");
+	    	        } else if(file.toString().toLowerCase().contains(".xls") || file.toString().toLowerCase().contains(".xlsx")) {
+	    	            // Excel file
+	    	            intent.setDataAndType(uri, "application/vnd.ms-excel");
+	    	        } else if(file.toString().toLowerCase().contains(".zip") || file.toString().toLowerCase().contains(".rar"))  {
+	    	            // ZIP Files
+	    	            intent.setDataAndType(uri, "application/zip");
+	    	        } else if(file.toString().toLowerCase().contains(".rtf")) {
+	    	            // RTF file
+	    	            intent.setDataAndType(uri, "application/rtf");
+	    	        } else if(file.toString().toLowerCase().contains(".gif")) {
+	    	            // GIF file
+	    	            intent.setDataAndType(uri, "image/gif");
+	    	        } else if(file.toString().toLowerCase().contains(".jpg") || file.toString().toLowerCase().contains(".jpeg") || file.toString().toLowerCase().contains(".png")) {
+	    	            // JPG file
+	    	            intent.setDataAndType(uri, "image/jpeg");
+	    	        } else if(file.toString().toLowerCase().contains(".txt")) {
+	    	            // Text file
+	    	            intent.setDataAndType(uri, "text/plain");
+	    	        } else if(file.toString().toLowerCase().contains(".3gp") || file.toString().toLowerCase().contains(".mpg") || file.toString().toLowerCase().contains(".mpeg") || file.toString().toLowerCase().contains(".mpe") || file.toString().toLowerCase().contains(".mp4") || file.toString().toLowerCase().contains(".avi")) {
+	    	            // Video files
+	    	            intent.setDataAndType(uri, "video/*");
+	    	        } else {
+	    	            //if you want you can also define the intent type for any other file
+	    	            
+	    	            //additionally use else clause below, to manage other unknown extensions
+	    	            //in this case, Android will show all applications installed on the device
+	    	            //so you can choose which application to use
+	    	            intent.setDataAndType(uri, "*/*");
+	    	        }
+	    	        
+	    	        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); 
+	    	        startActivity(intent);
 //    	    	Intent intent = new Intent (view.getContext(), FileListActivity.class);
 //    	        Product product = (Product)parent.getItemAtPosition(position);    	
 //            	intent.putExtra(NavisionTool.LAUNCH_DESCRIPTION, product.description);  
 //            	intent.putExtra(NavisionTool.LAUNCH_INFO_MODE, NavisionTool.INFO_MODE_SUMMARY);
 //            	startActivity(intent);
+    			}
 
         	}
     	});  
