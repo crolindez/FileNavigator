@@ -38,12 +38,15 @@ public class FileListActivity extends Activity implements LoaderManager.LoaderCa
     	    	
       	if (savedInstanceState != null) 
       	{
+
       		fileList = savedInstanceState.getParcelableArrayList(FileTool.FILE_LIST_KEY);
       		path = savedInstanceState.getString(FileTool.PATH_KEY,"");
       	}
       	else
       	{	
-      		path = "";
+      		Intent intent = getIntent();
+      		path = intent.getStringExtra(FileTool.PATH_KEY);
+      		if (path==null)	path = "";
         	lm = getLoaderManager(); 
 		    Bundle pathString = new Bundle();
 		    pathString.putString(FileTool.PATH_KEY, path);  	
@@ -62,12 +65,18 @@ public class FileListActivity extends Activity implements LoaderManager.LoaderCa
 
     			if (fileDescription.isFolder)
     			{
-      				path = path + fileDescription.fileName;
+       				Intent intent;				
+  
+    			    intent = new Intent (view.getContext(), FileListActivity.class);
+    		        intent.putExtra(FileTool.PATH_KEY, path + fileDescription.fileName);        	
+    	        	startActivity(intent);	
+    				
+    /*  				path = path + fileDescription.fileName;
     		      	lm = getLoaderManager(); 
     			    Bundle pathString = new Bundle();
     			    pathString.putString(FileTool.PATH_KEY, path);  	
     			    lm.restartLoader(FileTool.LOADER_BROWSE, pathString, fileListActivity);	
-
+*/
     				
     			}
     			else
