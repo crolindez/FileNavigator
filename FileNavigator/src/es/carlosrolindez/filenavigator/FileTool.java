@@ -18,7 +18,7 @@ public class FileTool
 	public static final String FILE_LIST_KEY = "FileListKey";
 	public static final String PATH_KEY = "PATH";
  
-    private static String address;
+    public  static String address;
     private static String domain;
     private static String username;
     private static String password;
@@ -31,7 +31,25 @@ public class FileTool
 		password = "";
 	}
 	
-
+	static public String getAddress()
+	{
+		return address;
+	}
+	
+	static public String getDomain()
+	{
+		return domain;
+	}
+	
+	static public String getUsername()
+	{
+		return username;
+	}
+	
+	static public String getPassword()
+	{
+		return password;
+	}
 	
 	static public void setServerConnection(String address, String domain, String username, String password)
 	{
@@ -50,7 +68,6 @@ public class FileTool
 		
 	  	try 
 	  	{
-//	      	String sSambaFolder =  "192.168.1.4/Users";
 			String url = "smb://" + address + '/' + path;
 			
 			NtlmPasswordAuthentication auth = new NtlmPasswordAuthentication(domain, username, password);
