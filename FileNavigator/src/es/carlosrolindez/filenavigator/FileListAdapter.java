@@ -61,7 +61,7 @@ public class FileListAdapter extends BaseAdapter {
 		View localView = convertView;
 		if (localView==null)
 		{
-			localView = inflater.inflate(R.layout.list_row, parent, false);
+			localView = inflater.inflate(R.layout.file_row, parent, false);
 		}
 		
 		TextView filename = (TextView)localView.findViewById(R.id.filename_list);	
